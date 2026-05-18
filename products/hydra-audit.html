@@ -46,14 +46,14 @@ tr:last-child td { border-bottom: none; }
 
 <h2>Overview</h2>
 <p class="section-note">Distributed infrastructure — whether an LLM inference cluster, a CDN edge network, or a payment system — generates enormous amounts of inter-node traffic that is difficult to audit in real time. A single compromised node can silently tamper with its own logs, forge timestamps, or replay transactions without detection by conventional monitoring.</p>
-<p class="section-note" style="margin-top:12px;">Hydra-Audit solves this by generating a cryptographic commitment for every operation: timestamps anchored to multiple independent sources (GPS, Roughtime, NTP), sealed with Ed25519. Any counterparty — a regulator, a partner, an auditor — can verify the proof without trusting the issuer's clock or infrastructure. 13 Byzantine attack vectors are detected automatically and logged with tamper-evident cryptographic evidence. Hydra-Audit is built on TTTPS (Temporal Token for TLS Protocol), currently under IETF standardization.</p>
+<p class="section-note" style="margin-top:12px;">Hydra-Audit solves this by generating a cryptographic commitment for every operation: timestamps anchored to multiple independent sources (GPS, Roughtime, NTP), sealed with AEAD (ChaCha20Poly1305) per event, with Ed25519 Merkle batch attestation. Any counterparty — a regulator, a partner, an auditor — can verify the proof without trusting the issuer's clock or infrastructure. 13 Byzantine attack vectors are detected automatically and logged with tamper-evident cryptographic evidence. Hydra-Audit is built on TTTPS (Temporal Token for TLS Protocol), currently under IETF standardization.</p>
 
 <h2>Why Cryptographic Audit?</h2>
 <p class="section-note">Traditional audit logs can be tampered — a compromised node can modify its own logs, adjust timestamps, or suppress records entirely. Hydra-Audit is designed so that this is structurally impossible to do silently:</p>
 <ul style="font-size:0.82rem; color:#444; margin-left:20px; margin-bottom:16px; line-height:1.8;">
   <li><strong>Commitment chain integrity:</strong> tampering at any layer produces a detectable mismatch — even if the attacker controls the logging node itself.</li>
   <li><strong>Multi-source time anchors:</strong> a compromised NTP server cannot falsify timestamps — GPS and Roughtime provide fully independent verification with no shared trust root.</li>
-  <li><strong>Ed25519 sealing:</strong> every event is signed at generation time; post-hoc modification is cryptographically detectable by any verifier without access to the original infrastructure.</li>
+  <li><strong>AEAD sealing:</strong> every event is encrypted and committed with a blake3 hash at generation time; Ed25519 signs the Merkle root per batch for external verifiability; post-hoc modification is cryptographically detectable by any verifier without access to the original infrastructure.</li>
   <li><strong>The result:</strong> an audit trail that is verifiable by any party without trusting any single infrastructure component — suitable for adversarial, cross-jurisdiction, and regulatory review contexts.</li>
 </ul>
 
@@ -89,7 +89,7 @@ tr:last-child td { border-bottom: none; }
 <ol style="font-size:0.82rem; color:#444; margin-left:20px; margin-bottom:16px; line-height:2;">
   <li><strong>Event trigger:</strong> each operation (KV transfer, CDN chunk delivery, API request) triggers a TTTPS token generation at the point of execution.</li>
   <li><strong>Time anchoring:</strong> the token anchors the event to multiple independent time sources — NIST, Roughtime, GPS — resistant to clock manipulation by any single authority.</li>
-  <li><strong>Cryptographic commitment pipeline:</strong> multi-source time anchors are processed through a proprietary multi-stage lattice commitment pipeline and sealed with an Ed25519 signature, forming an unforgeable cryptographic commitment chain.</li>
+  <li><strong>Cryptographic commitment pipeline:</strong> multi-source time anchors are processed through a proprietary multi-stage lattice commitment pipeline and AEAD-sealed and blake3-hashed per event, with Ed25519 Merkle root attestation per batch, forming an unforgeable cryptographic commitment chain.</li>
   <li><strong>Tamper detection:</strong> any tampering at any stage — time drift, replay, signature forgery, reordering — produces a verifiable mismatch at verification time, detectable by any party holding the public key.</li>
   <li><strong>Audit log delivery:</strong> events are stored with 90-day retention and are queryable via REST API or Prometheus, exportable as JSON-LD for compliance tooling and regulatory submission.</li>
 </ol>
@@ -100,7 +100,7 @@ tr:last-child td { border-bottom: none; }
 <tbody>
 <tr><td>Token Replay</td><td>Commitment chain deduplication</td><td>✓ Active</td></tr>
 <tr><td>Timestamp Drift</td><td>Multi-source time anchor comparison</td><td>✓ Active</td></tr>
-<tr><td>Signature Forgery</td><td>Ed25519 verification</td><td>✓ Active</td></tr>
+<tr><td>Signature Forgery</td><td>AEAD tag + blake3 Merkle verification</td><td>✓ Active</td></tr>
 <tr><td>Flood DDoS</td><td>Rate-limit + token budget enforcement</td><td>✓ Active</td></tr>
 <tr><td>Ordering Attack</td><td>Sequence integrity check</td><td>✓ Active</td></tr>
 <tr><td>Cross-Pool Replay</td><td>ctx_id scope isolation</td><td>✓ Active</td></tr>
@@ -191,7 +191,7 @@ tr:last-child td { border-bottom: none; }
 <thead><tr><th>Regulation</th><th>Requirement</th><th>Hydra-Audit Coverage</th></tr></thead>
 <tbody>
 <tr><td><strong>SOC 2 Type II</strong><br><span style="font-size:0.8rem;color:#888">CC7.1 / CC7.2</span></td><td>Security monitoring, incident detection evidence</td><td>Prometheus metrics + Grafana dashboard = auditor-ready continuous evidence</td></tr>
-<tr><td><strong>ISO 27001:2022</strong><br><span style="font-size:0.8rem;color:#888">Controls 8.15, 8.16, 8.17</span></td><td>Logging, monitoring, clock synchronization</td><td>Tamper-evident log with Ed25519 seals; NTP multi-source sync auditable per-event</td></tr>
+<tr><td><strong>ISO 27001:2022</strong><br><span style="font-size:0.8rem;color:#888">Controls 8.15, 8.16, 8.17</span></td><td>Logging, monitoring, clock synchronization</td><td>Tamper-evident log with AEAD seals and blake3 Merkle commitments; NTP multi-source sync auditable per-event</td></tr>
 <tr><td><strong>PCI DSS v4.0</strong><br><span style="font-size:0.8rem;color:#888">Req.10.3.2 / 10.5.1 / 10.6</span></td><td>Audit log protection, integrity, review</td><td>Cryptographic log integrity; 90-day retention; automated review via Prometheus alerts</td></tr>
 <tr><td><strong>DORA Art.10</strong><br><span style="font-size:0.8rem;color:#888">EU 2022/2554</span></td><td>ICT threat detection mechanisms</td><td>13 Byzantine attack types auto-detected, logged with cryptographic evidence</td></tr>
 <tr><td><strong>GDPR Art.5(2) / Art.32</strong><br><span style="font-size:0.8rem;color:#888">EU</span></td><td>Accountability principle, technical security measures</td><td>Per-operation cryptographic commitment; JSON-LD export for DPA submission</td></tr>
