@@ -336,16 +336,46 @@ ol.steps li { padding: 6px 0; font-size: 0.82rem; line-height: 1.6; }
 
 <!-- SECTION 9: Regulatory Coverage -->
 <h2>Regulatory Coverage</h2>
-<p class="section-note">HYDRA-KV's QUIC-encrypted transport and per-chunk TTTPS audit seal satisfy data transfer security requirements across major privacy regulations.</p>
+<p class="section-note">Every prefill-to-decode KV transfer in HYDRA-KV generates a TTTPS-sealed record: which model, which tokens, between which nodes, at what time — submittable to regulators as-is. No reconstruction at audit time.</p>
 <table>
   <thead>
     <tr><th>Regulation</th><th>Requirement</th><th>HYDRA-KV Coverage</th></tr>
   </thead>
   <tbody>
     <tr>
-      <td><strong>GDPR Art.32</strong><br><span style="font-size:0.8rem;color:#888">EU</span></td>
-      <td>Technical measures for secure processing</td>
-      <td>QUIC (TLS 1.3) encrypted KV transfer; per-chunk Ed25519 audit seal</td>
+      <td><strong>EU AI Act Art.12</strong><br><span style="font-size:0.8rem;color:#888">EU 2024/1689</span></td>
+      <td>High-risk AI systems must log operations automatically and retain records for regulatory inspection</td>
+      <td>Every inference transfer sealed with TTTPS: model ID, token batch, timestamp, node — 90-day retention; JSON-LD export for competent authority submission</td>
+    </tr>
+    <tr>
+      <td><strong>EU AI Act Art.53</strong><br><span style="font-size:0.8rem;color:#888">EU 2024/1689 — GPAI</span></td>
+      <td>General-purpose AI providers must document training data and inference pipeline</td>
+      <td>TTTPS-sealed ingestion and inference log per model operation — source, date, scope immutably recorded and submittable to EU AI Office</td>
+    </tr>
+    <tr>
+      <td><strong>Korea AI Basic Act</strong><br><span style="font-size:0.8rem;color:#888">고위험 AI 기록의무 — 2026</span></td>
+      <td>High-impact AI systems must retain operation records and submit to government inspection</td>
+      <td>Per-inference TTTPS audit chain satisfies record retention; PIPA Art.28-8 encrypted transfer compliance included</td>
+    </tr>
+    <tr>
+      <td><strong>Japan AI Promotion Law</strong><br><span style="font-size:0.8rem;color:#888">AI 사업자 가이드라인 — 2025</span></td>
+      <td>AI service providers must disclose AI usage and maintain operation traceability</td>
+      <td>Immutable per-inference log with model attribution; JSON-LD export for FSA and Ministry of Digital Affairs submission</td>
+    </tr>
+    <tr>
+      <td><strong>NIST AI RMF 1.0</strong><br><span style="font-size:0.8rem;color:#888">US — GOVERN 1.4 / MEASURE 2.5</span></td>
+      <td>AI risk documentation: traceability of AI decisions and data lineage</td>
+      <td>Cryptographic inference audit trail provides tamper-evident decision lineage for FedRAMP and federal AI deployment requirements</td>
+    </tr>
+    <tr>
+      <td><strong>MAS MAS Notice 655</strong><br><span style="font-size:0.8rem;color:#888">Singapore — Financial AI</span></td>
+      <td>AI model explainability and audit trail for financial decision systems</td>
+      <td>Per-inference TTTPS seal creates auditable record of which model processed which request; queryable per-customer for MAS examination</td>
+    </tr>
+    <tr>
+      <td><strong>GDPR Art.22 / Art.32</strong><br><span style="font-size:0.8rem;color:#888">EU</span></td>
+      <td>Automated decision-making documentation; technical measures for secure processing</td>
+      <td>QUIC (TLS 1.3) encrypted KV transfer; per-chunk Ed25519 audit seal; Art.22 decision log per inference event</td>
     </tr>
     <tr>
       <td><strong>PIPA 제28조의8</strong><br><span style="font-size:0.8rem;color:#888">Korea</span></td>
@@ -353,14 +383,9 @@ ol.steps li { padding: 6px 0; font-size: 0.82rem; line-height: 1.6; }
       <td>QUIC end-to-end encryption; TTTPS-sealed transfer log for regulatory inspection</td>
     </tr>
     <tr>
-      <td><strong>PDPA</strong><br><span style="font-size:0.8rem;color:#888">Singapore</span></td>
-      <td>Protection of personal data in transfer</td>
-      <td>Encrypted QUIC channel; cryptographic transfer audit trail</td>
-    </tr>
-    <tr>
-      <td><strong>PIPL Art.51</strong><br><span style="font-size:0.8rem;color:#888">China</span></td>
-      <td>Technical measures for personal data protection</td>
-      <td>QUIC encryption + TTTPS audit chain for cross-border transfer documentation</td>
+      <td><strong>PDPA / PIPL Art.51</strong><br><span style="font-size:0.8rem;color:#888">Singapore / China</span></td>
+      <td>Personal data protection in AI inference transfer; cross-border data documentation</td>
+      <td>Encrypted QUIC channel; TTTPS audit chain for cross-border transfer documentation submittable to PDPC and CAC</td>
     </tr>
   </tbody>
 </table>
