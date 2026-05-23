@@ -46,13 +46,13 @@ tr:last-child td { border-bottom: none; }
 
 <h2>Overview</h2>
 <p class="section-note">Distributed infrastructure — whether an LLM inference cluster, a CDN edge network, or a payment system — generates enormous amounts of inter-node traffic that is difficult to audit in real time. A single compromised node can silently tamper with its own logs, forge timestamps, or replay transactions without detection by conventional monitoring.</p>
-<p class="section-note" style="margin-top:12px;">Hydra-Audit solves this by generating a cryptographic commitment for every operation: timestamps anchored to multiple independent sources (GPS, Roughtime, NTP), sealed with AEAD (ChaCha20Poly1305) per event, with Ed25519 Merkle batch attestation. Any counterparty — a regulator, a partner, an auditor — can verify the proof without trusting the issuer's clock or infrastructure. 13 Byzantine attack vectors are detected automatically and logged with tamper-evident cryptographic evidence. Hydra-Audit is built on TTTPS (Temporal Token for TLS Protocol), currently under IETF standardization.</p>
+<p class="section-note" style="margin-top:12px;">Hydra-Audit solves this by generating a cryptographic commitment for every operation: timestamps anchored to multiple independent sources (Roughtime, NTP — GPS/KTSat: 로드맵), sealed with AEAD (ChaCha20Poly1305) per event, with Ed25519 Merkle batch attestation. Any counterparty — a regulator, a partner, an auditor — can verify the proof without trusting the issuer's clock or infrastructure. 13 Byzantine attack vectors are detected automatically and logged with tamper-evident cryptographic evidence. Hydra-Audit is built on TTTPS (Temporal Token for TLS Protocol), currently under IETF standardization.</p>
 
 <h2>Why Cryptographic Audit?</h2>
 <p class="section-note">Traditional audit logs can be tampered — a compromised node can modify its own logs, adjust timestamps, or suppress records entirely. Hydra-Audit is designed so that this is structurally impossible to do silently:</p>
 <ul style="font-size:0.82rem; color:#444; margin-left:20px; margin-bottom:16px; line-height:1.8;">
   <li><strong>Commitment chain integrity:</strong> tampering at any layer produces a detectable mismatch — even if the attacker controls the logging node itself.</li>
-  <li><strong>Multi-source time anchors:</strong> a compromised NTP server cannot falsify timestamps — GPS and Roughtime provide fully independent verification with no shared trust root.</li>
+  <li><strong>Multi-source time anchors:</strong> a compromised NTP server cannot falsify timestamps — Roughtime provides fully independent verification with no shared trust root (GPS/KTSat anchor: 로드맵).</li>
   <li><strong>AEAD sealing:</strong> every event is encrypted and committed with a blake3 hash at generation time; Ed25519 signs the Merkle root per batch for external verifiability; post-hoc modification is cryptographically detectable by any verifier without access to the original infrastructure.</li>
   <li><strong>The result:</strong> an audit trail that is verifiable by any party without trusting any single infrastructure component — suitable for adversarial, cross-jurisdiction, and regulatory review contexts.</li>
 </ul>
@@ -88,7 +88,7 @@ tr:last-child td { border-bottom: none; }
 <h2>How Hydra-Audit Works</h2>
 <ol style="font-size:0.82rem; color:#444; margin-left:20px; margin-bottom:16px; line-height:2;">
   <li><strong>Event trigger:</strong> each operation (KV transfer, CDN chunk delivery, API request) triggers a TTTPS token generation at the point of execution.</li>
-  <li><strong>Time anchoring:</strong> the token anchors the event to multiple independent time sources — NIST, Roughtime, GPS — resistant to clock manipulation by any single authority.</li>
+  <li><strong>Time anchoring:</strong> the token anchors the event to multiple independent time sources — NIST, Roughtime — resistant to clock manipulation by any single authority (GPS/KTSat: 로드맵).</li>
   <li><strong>Cryptographic commitment pipeline:</strong> multi-source time anchors are processed through a proprietary multi-stage lattice commitment pipeline and AEAD-sealed and blake3-hashed per event, with Ed25519 Merkle root attestation per batch, forming an unforgeable cryptographic commitment chain.</li>
   <li><strong>Tamper detection:</strong> any tampering at any stage — time drift, replay, signature forgery, reordering — produces a verifiable mismatch at verification time, detectable by any party holding the public key.</li>
   <li><strong>Audit log delivery:</strong> events are stored with 90-day retention and are queryable via REST API or Prometheus, exportable as JSON-LD for compliance tooling and regulatory submission.</li>
@@ -149,10 +149,10 @@ tr:last-child td { border-bottom: none; }
 </table>
 <p class="section-note">Regulatory audit submissions reference a continuous chain. Migrating to a different audit system mid-cycle means the prior chain cannot be reproduced — the record breaks. The continuity requirement is enforced by regulators, not by Kenosian.</p>
 
-<div style="border:2px solid #c0392b; border-radius:3px; padding:20px; margin-bottom:24px;">
+<div style="border:2px solid #1a1a1a; border-radius:3px; padding:20px; margin-bottom:24px;">
   <div style="display:flex; align-items:baseline; gap:16px; flex-wrap:wrap; margin-bottom:12px;">
-    <span style="font-size:2rem; font-weight:700; color:#c0392b;">EU AI Act — August 2026</span>
-    <span style="font-size:0.85rem; font-weight:700; color:#c0392b;">EU AI Act — High-Risk Systems Mandatory — August 2026</span>
+    <span style="font-size:2rem; font-weight:700; color:#1a1a1a;">EU AI Act — August 2026</span>
+    <span style="font-size:0.85rem; font-weight:700; color:#1a1a1a;">EU AI Act — High-Risk Systems Mandatory — August 2026</span>
   </div>
   <p style="font-size:0.82rem; color:#444; margin-bottom:12px;">
     No compliant AI audit solution exists on the market. MLflow · W&amp;B · DataDog do not satisfy Art.12 requirements.
@@ -278,7 +278,7 @@ curl -X POST https://api.kenosian.com/api/demo/pot/verify \
 </table>
 <p class="section-note">Access on request — <a href="mailto:peter@kenosian.com">peter@kenosian.com</a></p>
 
-<div style="border:2px solid #c0392b; border-radius:3px; padding:24px; margin:32px 0; background:#fff8f8;">
+<div style="border:2px solid #1a1a1a; border-radius:3px; padding:24px; margin:32px 0; background:#f8f8f8;">
   <p style="font-size:0.92rem; font-weight:700; color:#1a1a1a; line-height:1.8; margin-bottom:16px;">
     <strong>EU AI Act enforcement begins August 2026. MLflow does not satisfy Art.12. Weights &amp; Biases does not satisfy Art.12. DataDog does not satisfy Art.12. Building it yourself takes 12+ months and still won't survive a legal proceeding.</strong>
   </p>
@@ -289,27 +289,31 @@ curl -X POST https://api.kenosian.com/api/demo/pot/verify \
 </div>
 
 <h2>Pricing</h2>
-<p class="section-note">Framework-based coverage — priced against regulatory risk, not event volume. Events are unlimited across all tiers.</p>
+<div style="background:#f0f0f0; border-left:3px solid #1a1a1a; padding:14px 18px; margin-bottom:18px; font-size:0.85rem; line-height:1.7;">
+  <strong>Included free with Hydra-KV and Hydra-CDN — 30-day automatic activation.</strong><br>
+  Every KV and CDN deployment automatically activates Hydra-Audit. Your EU AI Act compliance chain starts building from day one. After 30 days: continue at €100/node/month or the chain is permanently deleted — past events cannot be reconstructed.
+</div>
+<p class="section-note">Node-based — priced against cluster size and retention window. Unlimited events on all tiers. Per-event pricing creates incentive to skip audit coverage; node pricing means every event is sealed, always.</p>
 <table>
 <thead><tr><th>Tier</th><th>Target</th><th>Includes</th><th>Price</th></tr></thead>
 <tbody>
 <tr>
   <td><strong>Inference</strong></td>
-  <td>Inference startups · EU AI Act Art.12</td>
+  <td>Inference clusters · EU AI Act Art.12</td>
   <td>Unlimited events · 90-day retention · JSON-LD export · Prometheus · Grafana</td>
-  <td><strong>€2,000/month</strong></td>
+  <td><strong>€100/node/month</strong></td>
 </tr>
 <tr>
   <td><strong>Training</strong></td>
   <td>GPAI providers · EU AI Act Art.53 + copyright defense</td>
   <td>Unlimited events · 1-year retention · Training batch PoT sealing · Copyright chain · JSON-LD · Grafana</td>
-  <td><strong>€6,000/month</strong></td>
+  <td><strong>€300/node/month</strong></td>
 </tr>
 <tr>
   <td><strong>Full</strong></td>
   <td>Systemic risk model holders · 3-year regulatory cycle</td>
-  <td>All tiers + 3-year retention · Regulatory submission support · Dedicated onboarding</td>
-  <td><strong>€15,000/month</strong></td>
+  <td>All tiers + 3-year retention · $0.03/GB long-term storage · Regulatory submission support · Dedicated onboarding</td>
+  <td><strong>€500/node/month</strong></td>
 </tr>
 <tr>
   <td><strong>Enterprise</strong></td>
@@ -320,25 +324,11 @@ curl -X POST https://api.kenosian.com/api/demo/pot/verify \
 </tbody>
 </table>
 <p class="section-note">
-  KV + Audit bundle: <strong>$0.03/GB processed</strong> — Audit included.
-  Standalone Audit: tiers above. Two separate buyer paths — engineering team adopts KV, legal team renews Audit.
+  Annual contract: 2 months free (pay 10, get 12). &nbsp;·&nbsp;
+  Multi-product bundle (2+ products): 20% discount. &nbsp;·&nbsp;
+  Equinix Fabric customers: 6 months free on first deployment.
 </p>
 
-<h2>Infrastructure Economics</h2>
-<p class="section-note">Hydra-Audit operates natively on Equinix Fabric. Fixed infrastructure cost regardless of customer count — margin improves with scale.</p>
-<table>
-<thead><tr><th>Customers</th><th>Events/day</th><th>Infra cost/month</th><th>Revenue/month</th><th>Margin</th></tr></thead>
-<tbody>
-<tr><td>1</td><td>1M</td><td>$50</td><td>€2,000</td><td>97%</td></tr>
-<tr><td>10</td><td>10M</td><td>$150</td><td>€20,000</td><td>99%</td></tr>
-<tr><td>50</td><td>50M</td><td>$500</td><td>€100,000</td><td>99.5%</td></tr>
-<tr><td>200</td><td>200M</td><td>$1,500</td><td>€400,000</td><td>99.6%</td></tr>
-</tbody>
-</table>
-<p class="section-note">
-  Equinix 1GbE EVPL port: ~$400/month fixed. At 1,000 events/second, network utilization is 1.6% of 1GbE — port cost does not scale with customer volume.
-  Every customer Virtual Connection generates Equinix Fabric revenue.
-</p>
 
 <h2>API Access</h2>
 <p class="section-note">Contact <a href="mailto:peter@kenosian.com">peter@kenosian.com</a> for API key provisioning and integration support.</p>

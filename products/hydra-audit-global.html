@@ -394,7 +394,7 @@ tr:last-child td { border-bottom: none; }
 
 <!-- Section 4c: EU AI Act Article Coverage -->
 <h2>4b — EU AI Act Article Coverage</h2>
-<p class="section-note">Hydra-Audit satisfies the following EU AI Act articles directly, without additional tooling.</p>
+<p class="section-note">Hydra-Audit satisfies the following EU AI Act articles. Coverage levels vary: directly implemented, platform-layer enablement for AI company implementation, and roadmap items enabled by Equinix DPU deployment.</p>
 
 <table>
 <thead>
@@ -406,6 +406,16 @@ tr:last-child td { border-bottom: none; }
 </thead>
 <tbody>
 <tr>
+  <td><strong>Art.9</strong><br><span style="font-size:0.78rem;color:#888">Risk Management System</span></td>
+  <td>Providers of high-risk AI must establish and maintain a risk management system throughout the AI system lifecycle</td>
+  <td>🔜 로드맵: Equinix DPU 배포 시 — hardware-level telemetry enables continuous risk measurement and automated anomaly flagging across the AI system lifecycle, providing the instrumentation layer for Art.9 risk management systems</td>
+</tr>
+<tr>
+  <td><strong>Art.11</strong><br><span style="font-size:0.78rem;color:#888">Technical Documentation</span></td>
+  <td>Providers of high-risk AI must maintain technical documentation demonstrating system compliance throughout the lifecycle</td>
+  <td>Hydra-Audit generates immutable, timestamped documentation of every AI system operation — directly satisfying Art.11 technical documentation requirements with cryptographic lifecycle records exportable for competent authority review</td>
+</tr>
+<tr>
   <td><strong>Art.12</strong><br><span style="font-size:0.78rem;color:#888">Logging obligations</span></td>
   <td>High-risk AI systems must generate automatic logs retaining records for regulatory inspection</td>
   <td>Every inference and transfer event sealed with TTTPS: model ID, token batch, timestamp, node — 90-day retention; JSON-LD export for competent authority submission</td>
@@ -413,12 +423,17 @@ tr:last-child td { border-bottom: none; }
 <tr>
   <td><strong>Art.13</strong><br><span style="font-size:0.78rem;color:#888">Transparency &amp; Information Obligations</span></td>
   <td>Deployers of high-risk AI must provide verifiable information about AI system operations to users and regulators</td>
-  <td>Hydra-TTTPS cryptographic proof chain provides a verifiable audit trail satisfying transparency requirements for AI system outputs — every event cryptographically attributable</td>
+  <td>Hydra-Audit provides the platform layer enabling AI companies to satisfy Art.13 transparency obligations — every AI system event is cryptographically attributable and exportable, giving deployers verifiable evidence of system operation to present to users and regulators</td>
 </tr>
 <tr>
   <td><strong>Art.14</strong><br><span style="font-size:0.78rem;color:#888">Human Oversight</span></td>
   <td>High-risk AI systems must enable human reviewers to inspect, understand, and override AI decisions</td>
-  <td>Hydra-Audit immutable forensic logs enable human reviewers to inspect, trace, and override AI decisions at any point in the audit chain — queryable per context pool</td>
+  <td>Hydra-Audit provides the forensic infrastructure enabling human oversight of AI decisions — immutable logs allow reviewers to inspect, trace, and provide evidence for AI decision challenges at any point in the system lifecycle, supporting AI company Art.14 compliance implementation</td>
+</tr>
+<tr>
+  <td><strong>Art.15</strong><br><span style="font-size:0.78rem;color:#888">Accuracy, Robustness &amp; Cybersecurity</span></td>
+  <td>High-risk AI systems must achieve appropriate levels of accuracy, robustness, and cybersecurity throughout lifecycle</td>
+  <td>Hydra-Audit continuously monitors AI system operational integrity — 13 Byzantine attack vectors auto-detected and logged with cryptographic evidence, providing the audit backbone for ongoing robustness and cybersecurity compliance verification</td>
 </tr>
 <tr>
   <td><strong>Art.19</strong><br><span style="font-size:0.78rem;color:#888">Automatically Generated Logs</span></td>
@@ -433,7 +448,7 @@ tr:last-child td { border-bottom: none; }
 <tr>
   <td><strong>Art.72</strong><br><span style="font-size:0.78rem;color:#888">Post-Market Monitoring</span></td>
   <td>Providers of high-risk AI must establish post-market monitoring systems tracking AI behavior after deployment</td>
-  <td>Hydra-Audit continuous Byzantine audit stream enables post-deployment monitoring of AI system behavior, satisfying Art.72 obligations — anomaly detection and REPLAY/FORGE/ORDERING event logging included</td>
+  <td>Hydra-Audit continuous Byzantine audit stream enables post-deployment monitoring of AI system behavior — anomaly detection and REPLAY/FORGE/ORDERING event logging included. 🔜 로드맵: Equinix DPU 배포 시 hardware-level telemetry integration provides full Art.72 post-market monitoring instrumentation at the infrastructure layer</td>
 </tr>
 </tbody>
 </table>

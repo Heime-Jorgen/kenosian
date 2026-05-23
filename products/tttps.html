@@ -61,7 +61,7 @@ nav.breadcrumb a { color: #555; }
   Traditional systems detect this only after the fact — or not at all.
 </p>
 <p class="section-note">
-  TTTPS solves this at the protocol level. Every attestation is anchored to <strong>multiple independent time sources simultaneously</strong> — GPS, NIST Roughtime, and network time — and bound into a cryptographic commitment chain.
+  TTTPS solves this at the protocol level. Every attestation is anchored to <strong>multiple independent time sources simultaneously</strong> — NIST Roughtime and network time (GPS/KTSat: 로드맵) — and bound into a cryptographic commitment chain.
   Any single-source manipulation is immediately detectable because the other sources disagree.
   The commitment chain also makes replay attacks detectable: the same token submitted twice produces a verifiable collision.
 </p>
@@ -72,7 +72,7 @@ nav.breadcrumb a { color: #555; }
   Most distributed systems rely on a single trusted clock or timestamp server. If that clock is wrong — due to drift — or compromised — via NTP injection or GPS spoofing — the entire audit trail is corrupted. Every downstream record that depends on that timestamp is now unreliable, and the attack is undetectable from inside the system.
 </p>
 <p class="section-note">
-  TTTPS solves this by anchoring every token to multiple independent time sources simultaneously — GPS, NIST Roughtime, and network time — and creating a cryptographic commitment chain across all of them. Any single-source manipulation is detected because the other sources disagree. The multi-source divergence is logged with the specific attack type so the audit trail remains intact even under active attack.
+  TTTPS solves this by anchoring every token to multiple independent time sources simultaneously — NIST Roughtime and network time (GPS/KTSat: 로드맵) — and creating a cryptographic commitment chain across all of them. Any single-source manipulation is detected because the other sources disagree. The multi-source divergence is logged with the specific attack type so the audit trail remains intact even under active attack.
 </p>
 <p class="section-note">
   The commitment chain also makes replay attacks detectable: the same token submitted twice produces a chain collision on the second verify. The system does not need to trust the submitter or the network — it only needs the commitment to be internally consistent.
@@ -181,7 +181,7 @@ nav.breadcrumb a { color: #555; }
   All manipulation converges to commitment mismatch.
 </div>
 <p class="section-note">
-  The pipeline ingests independent time sources — GPS, NIST Roughtime, network time — and computes a layered commitment across entropy, ordering, and integrity dimensions. The result is sealed with an Ed25519 signature over the final chain digest. Any tampering at any stage produces a verifiable mismatch at verification time, regardless of which attack vector is used. The specifics of the commitment pipeline are proprietary.
+  The pipeline ingests independent time sources — NIST Roughtime, network time (GPS/KTSat: 로드맵) — and computes a layered commitment across entropy, ordering, and integrity dimensions. The result is sealed with an Ed25519 signature over the final chain digest. Any tampering at any stage produces a verifiable mismatch at verification time, regardless of which attack vector is used. The specifics of the commitment pipeline are proprietary.
 </p>
 <p class="section-note">
   Note: pipeline architecture is abstracted for IP protection. Contact <a href="mailto:peter@kenosian.com">peter@kenosian.com</a> for technical deep-dive.
@@ -365,7 +365,7 @@ tttps_byzantine_ratio               0.021</pre>
     <tr>
       <td><strong>MAS TRM 2021</strong><br><span style="font-size:0.8rem;color:#888">Section 6.4.1, Singapore</span></td>
       <td>Financial infrastructure time audit</td>
-      <td>Multi-anchor PoT with GPS + NTP + Roughtime sources</td>
+      <td>Multi-anchor PoT with NTP + Roughtime sources (GPS/KTSat: 로드맵)</td>
     </tr>
     <tr>
       <td><strong>FCA PS17/14</strong><br><span style="font-size:0.8rem;color:#888">UK MiFID II equivalent</span></td>
@@ -431,7 +431,29 @@ tttps_byzantine_ratio               0.021</pre>
   Production API: <a href="mailto:peter@kenosian.com">peter@kenosian.com</a>
 </p>
 
-<!-- SECTION 9: API Access -->
+<!-- SECTION 9: Pricing + API Access -->
+<h2>Pricing</h2>
+<p class="section-note">Usage-based — priced per token (generate + verify pair). Monthly minimum covers baseline infrastructure. All tiers include unlimited Byzantine attack detection and audit log retention.</p>
+<table>
+<thead><tr><th>Tier</th><th>Price</th><th>Includes</th></tr></thead>
+<tbody>
+<tr>
+  <td><strong>Standard</strong></td>
+  <td><strong>$500/month</strong> (50M tokens included)<br>$0.0001/token overage</td>
+  <td>Full Byzantine detection · 90-day audit log · Prometheus · JSON-LD export</td>
+</tr>
+<tr>
+  <td><strong>Enterprise</strong></td>
+  <td><strong>Contact</strong></td>
+  <td>SLA 99.9% · dedicated onboarding · custom retention · <a href="mailto:peter@kenosian.com">peter@kenosian.com</a></td>
+</tr>
+</tbody>
+</table>
+<p class="section-note">
+  Market reference: DigiCert timestamp authority $0.10–0.50/token. TTTPS: $0.0001/token with multi-source Roughtime + Byzantine detection included.<br>
+  Annual contract: 2 months free. &nbsp;·&nbsp; Included in all Hydra product bundles.
+</p>
+
 <h2>API Access</h2>
 <p class="section-note">
   Production API key required.<br>
@@ -457,7 +479,7 @@ tttps_byzantine_ratio               0.021</pre>
   </tbody>
 </table>
 
-<div style="border:2px solid #c0392b; border-radius:3px; padding:24px; margin:32px 0; background:#fff8f8;">
+<div style="border:2px solid #1a1a1a; border-radius:3px; padding:24px; margin:32px 0; background:#f8f8f8;">
   <p style="font-size:0.92rem; font-weight:700; color:#1a1a1a; line-height:1.8; margin-bottom:16px;">
     <strong>The CoE AI Convention is now binding law across 37 countries: EU, US, UK, Canada, Japan, Australia. A TTTPS chain generated at the moment of your AI operation is simultaneously valid cryptographic evidence in every signatory jurisdiction.</strong>
   </p>
