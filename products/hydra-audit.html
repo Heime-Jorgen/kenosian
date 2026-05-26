@@ -46,13 +46,13 @@ tr:last-child td { border-bottom: none; }
 
 <h2>Overview</h2>
 <p class="section-note">Distributed infrastructure — whether an LLM inference cluster, a CDN edge network, or a payment system — generates enormous amounts of inter-node traffic that is difficult to audit in real time. A single compromised node can silently tamper with its own logs, forge timestamps, or replay transactions without detection by conventional monitoring.</p>
-<p class="section-note" style="margin-top:12px;">Hydra-Audit solves this by generating a cryptographic commitment for every operation: timestamps anchored to multiple independent sources (Roughtime, NTP — GPS/KTSat: 로드맵), sealed with AEAD (ChaCha20Poly1305) per event, with Ed25519 Merkle batch attestation. Any counterparty — a regulator, a partner, an auditor — can verify the proof without trusting the issuer's clock or infrastructure. 13 Byzantine attack vectors are detected automatically and logged with tamper-evident cryptographic evidence. Hydra-Audit is built on TTTPS (Temporal Token for TLS Protocol), currently under IETF standardization.</p>
+<p class="section-note" style="margin-top:12px;">Hydra-Audit solves this by generating a cryptographic commitment for every operation: timestamps anchored to multiple independent sources (Roughtime, NTP — GPS/KTSat: roadmap), sealed with AEAD (ChaCha20Poly1305) per event, with Ed25519 Merkle batch attestation. Any counterparty — a regulator, a partner, an auditor — can verify the proof without trusting the issuer's clock or infrastructure. 13 Byzantine attack vectors are detected automatically and logged with tamper-evident cryptographic evidence. Hydra-Audit is built on TTTPS (Temporal Token for TLS Protocol), currently under IETF standardization.</p>
 
 <h2>Why Cryptographic Audit?</h2>
 <p class="section-note">Traditional audit logs can be tampered — a compromised node can modify its own logs, adjust timestamps, or suppress records entirely. Hydra-Audit is designed so that this is structurally impossible to do silently:</p>
 <ul style="font-size:0.82rem; color:#444; margin-left:20px; margin-bottom:16px; line-height:1.8;">
   <li><strong>Commitment chain integrity:</strong> tampering at any layer produces a detectable mismatch — even if the attacker controls the logging node itself.</li>
-  <li><strong>Multi-source time anchors:</strong> a compromised NTP server cannot falsify timestamps — Roughtime provides fully independent verification with no shared trust root (GPS/KTSat anchor: 로드맵).</li>
+  <li><strong>Multi-source time anchors:</strong> a compromised NTP server cannot falsify timestamps — Roughtime provides fully independent verification with no shared trust root (GPS/KTSat anchor: roadmap).</li>
   <li><strong>AEAD sealing:</strong> every event is encrypted and committed with a blake3 hash at generation time; Ed25519 signs the Merkle root per batch for external verifiability; post-hoc modification is cryptographically detectable by any verifier without access to the original infrastructure.</li>
   <li><strong>The result:</strong> an audit trail that is verifiable by any party without trusting any single infrastructure component — suitable for adversarial, cross-jurisdiction, and regulatory review contexts.</li>
 </ul>
@@ -98,7 +98,7 @@ tr:last-child td { border-bottom: none; }
 <h2>How Hydra-Audit Works</h2>
 <ol style="font-size:0.82rem; color:#444; margin-left:20px; margin-bottom:16px; line-height:2;">
   <li><strong>Event trigger:</strong> each operation (KV transfer, CDN chunk delivery, API request) triggers a TTTPS token generation at the point of execution.</li>
-  <li><strong>Time anchoring:</strong> the token anchors the event to multiple independent time sources — NIST, Roughtime — resistant to clock manipulation by any single authority (GPS/KTSat: 로드맵).</li>
+  <li><strong>Time anchoring:</strong> the token anchors the event to multiple independent time sources — NIST, Roughtime — resistant to clock manipulation by any single authority (GPS/KTSat: roadmap).</li>
   <li><strong>Cryptographic commitment pipeline:</strong> multi-source time anchors are processed through a proprietary multi-stage lattice commitment pipeline and AEAD-sealed and blake3-hashed per event, with Ed25519 Merkle root attestation per batch, forming an unforgeable cryptographic commitment chain.</li>
   <li><strong>Tamper detection:</strong> any tampering at any stage — time drift, replay, signature forgery, reordering — produces a verifiable mismatch at verification time, detectable by any party holding the public key.</li>
   <li><strong>Audit log delivery:</strong> events are stored with 90-day retention and are queryable via REST API or Prometheus, exportable as JSON-LD for compliance tooling and regulatory submission.</li>
@@ -193,7 +193,7 @@ tr:last-child td { border-bottom: none; }
 <tr><td><strong>PCI DSS v4.0</strong><br><span style="font-size:0.8rem;color:#888">Req.10.3.2 / 10.5.1 / 10.6</span></td><td>Audit log protection, integrity, review</td><td>Cryptographic log integrity; 90-day retention; automated review via Prometheus alerts</td></tr>
 <tr><td><strong>DORA Art.10</strong><br><span style="font-size:0.8rem;color:#888">EU 2022/2554</span></td><td>ICT threat detection mechanisms</td><td>13 Byzantine attack types auto-detected, logged with cryptographic evidence</td></tr>
 <tr><td><strong>GDPR Art.5(2) / Art.32</strong><br><span style="font-size:0.8rem;color:#888">EU</span></td><td>Accountability principle, technical security measures</td><td>Per-operation cryptographic commitment; JSON-LD export for DPA submission</td></tr>
-<tr><td><strong>MiFID II RTS 25</strong><br><span style="font-size:0.8rem;color:#888">EU 2017/574, Art.2(3)</span></td><td>Financial infrastructure audit trail — ±1ms timestamp precision</td><td>🔜 로드맵: GEO 타임소스 추가 시 (KTSat ±10ns) → ±1ms 요건 10× 초과 달성. 현재: Roughtime ±수ms (금융 거래 타임스탬프 요건 미충족)</td></tr>
+<tr><td><strong>MiFID II RTS 25</strong><br><span style="font-size:0.8rem;color:#888">EU 2017/574, Art.2(3)</span></td><td>Financial infrastructure audit trail — ±1ms timestamp precision</td><td>🔜 Roadmap: with GEO time source added (KTSat ±10ns) → ±1ms requirement exceeded 10×. Current: Roughtime ±few ms (financial transaction timestamp requirement not yet met)</td></tr>
 <tr><td><strong>EU AI Act Art.53</strong><br><span style="font-size:0.8rem;color:#888">EU 2024/1689</span></td><td>Training data documentation for general-purpose AI models</td><td>PoT-sealed ingestion log per training batch — source, date, scope immutably recorded</td></tr>
 <tr><td><strong>EU AI Act Art.12</strong><br><span style="font-size:0.8rem;color:#888">EU 2024/1689 — Enforcement Aug 2, 2026</span></td><td>Automatic event logging + log retention for high-risk AI systems</td><td>Every event sealed with TTTPS: 90-day retention; JSON-LD court-admissible export; chain_integrity: true — 796/796 events, Redis AOF restart-verified. Enforcement: August 2, 2026 (€15M or 3% turnover).</td></tr>
 <tr><td><strong>TRAI</strong><br><span style="font-size:0.8rem;color:#888">India</span></td><td>Telecom timestamp integrity</td><td>Format aligned with TRAI audit requirements</td></tr>
@@ -328,7 +328,7 @@ curl -X POST https://api.kenosian.com/api/demo/pot/verify \
 <tr>
   <td><strong>Enterprise</strong></td>
   <td>Financial infrastructure · Medical AI · High-risk systems</td>
-  <td>SOC 2 Type II · DORA · SLA 99.9% · On-premise option · Custom integrations · MiFID II RTS 25 (GEO 타임소스 추가 시)</td>
+  <td>SOC 2 Type II · DORA · SLA 99.9% · On-premise option · Custom integrations · MiFID II RTS 25 (with GEO time source added)</td>
   <td><strong>Contact — <a href="mailto:peter@kenosian.com">peter@kenosian.com</a></strong></td>
 </tr>
 </tbody>
