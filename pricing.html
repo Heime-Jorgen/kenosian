@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kenosian — Pricing</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'SF Mono', 'Fira Code', monospace; max-width: 900px; margin: 60px auto; padding: 0 24px; color: #1a1a1a; background: #fafafa; line-height: 1.6; }
+h1 { font-size: 1.5rem; font-weight: 700; border-bottom: 2px solid #1a1a1a; padding-bottom: 12px; margin-bottom: 6px; }
+h2 { font-size: 1rem; font-weight: 600; margin-top: 0; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.05em; color: #1a1a1a; }
+.tag { color: #666; font-size: 0.8rem; margin-bottom: 32px; display: block; }
+table { width: 100%; border-collapse: collapse; font-size: 0.82rem; margin-bottom: 16px; }
+th { background: #1a1a1a; color: #fff; padding: 8px 12px; text-align: left; font-weight: 600; }
+td { padding: 8px 12px; border-bottom: 1px solid #e0e0e0; vertical-align: top; }
+tr:nth-child(even) td { background: #f5f5f5; }
+.section-note { font-size: 0.78rem; color: #666; margin-top: 8px; margin-bottom: 16px; }
+footer { margin-top: 60px; padding-top: 20px; border-top: 1px solid #ddd; color: #888; font-size: 0.78rem; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px; }
+a { color: #1a1a1a; }
+nav.breadcrumb { font-size: 0.8rem; color: #888; margin-bottom: 32px; }
+nav.breadcrumb a { color: #555; }
+.callout-box { border: 2px solid #1a1a1a; padding: 16px 20px; margin-bottom: 24px; background: #f8f8f8; border-radius: 2px; }
+.callout-box p { font-size: 0.82rem; color: #1a1a1a; margin-bottom: 0; }
+.callout-box p + p { margin-top: 8px; }
+.churn-box { border: 1px solid #ccc; padding: 12px 16px; margin-top: 24px; background: #fafafa; border-radius: 2px; }
+.churn-box p { font-size: 0.78rem; color: #444; margin-bottom: 0; }
+.churn-box p + p { margin-top: 6px; }
+.tier-highlight { background: #1a1a1a !important; color: #fff !important; font-weight: 700; }
+.tier-highlight td { background: #1a1a1a !important; color: #fff !important; }
+</style>
+</head>
+<body>
+
+<nav class="breadcrumb"><a href="/">kenosian.com</a> · <a href="/products.html">Products</a> · <a href="/business.html">Business</a> · Pricing</nav>
+
+<h1>Kenosian — Pricing</h1>
+<span class="tag">OpenTTT · ttt-mcp · API access · BSL-1.1</span>
+
+<!-- Amnesia Prevention 설명 -->
+<div class="callout-box" style="margin-bottom:24px;">
+  <p style="font-weight:700; font-size:0.85rem; margin-bottom:8px;">OpenTTT — Solving Workflow Amnesia for Claude Code</p>
+  <p>Every Claude Code long-horizon workflow hits the same wall: context compression erases action history. Agent B doesn't know what Agent A decided. Agents duplicate work, corrupt state, lose decisions made hours earlier.</p>
+  <p style="margin-top:10px;">OpenTTT anchors every workflow step to a cryptographic timestamp on an <strong>external server</strong> — physically separate from Claude's context window. When compression hits, agents call <code>pot_query(eventId)</code> for O(1) exact step recall. Zero lost state.</p>
+  <p style="margin-top:10px; font-size:0.8rem; color:#444;"><strong>Mathematical guarantees:</strong> SHA-3 256-bit eventId: collision probability 2⁻²⁵⁶ · O(1) exact lookup · DAG causal chain via prevEventId · Ed25519 non-repudiation · Golay shards: ≥97% at BER=0.05 · Redis AOF persistence, 90-day TTL</p>
+  <p style="margin-top:10px; font-size:0.8rem; color:#555;">7 tools: pot_generate · pot_verify · pot_query · pot_graph · pot_checkpoint · pot_stats · pot_health &nbsp;·&nbsp; IETF TTTPS-standardized · MiFIR Art.22c audit-grade</p>
+  <p style="margin-top:10px; font-size:0.78rem; color:#555;"><strong>Example:</strong> A 20-agent Dynamic Workflow refactors a 500K-line codebase over hours. After each context compression, every agent calls pot_query(eventId) — the external server returns its exact action history. Zero lost state. Zero duplicate work.</p>
+</div>
+
+<!-- OpenTTT / ttt-mcp 과금 -->
+<div style="border:1px solid #e0e0e0; padding:20px 24px; margin-bottom:24px; border-radius:3px;">
+  <h2 style="margin-bottom:12px;">OpenTTT / ttt-mcp — API Pricing</h2>
+  <table>
+    <tr>
+      <th>Tier</th>
+      <th>Target</th>
+      <th>Price</th>
+      <th>Quota</th>
+      <th>Notes</th>
+    </tr>
+    <tr>
+      <td><strong>FREE</strong></td>
+      <td>Individual developers</td>
+      <td><strong>$0</strong></td>
+      <td>100 calls/day per IP</td>
+      <td>Test amnesia prevention — no signup required</td>
+    </tr>
+    <tr>
+      <td><strong>Dev</strong></td>
+      <td>Solo devs · Claude Code power users</td>
+      <td><strong>$29/mo</strong></td>
+      <td>100K calls/month</td>
+      <td>API key · full causal chain · pot_graph</td>
+    </tr>
+    <tr>
+      <td><strong>Pro</strong></td>
+      <td>Production agents · startups</td>
+      <td><strong>$99/mo</strong></td>
+      <td>1M calls/month</td>
+      <td>All Dev features · higher quota</td>
+    </tr>
+    <tr>
+      <td><strong>Team</strong></td>
+      <td>Multi-agent workflows · AI automation teams</td>
+      <td><strong>$299/mo</strong></td>
+      <td>10M calls/month + $0.01/1K overage</td>
+      <td>5 API keys · multi-session continuity</td>
+    </tr>
+    <tr class="tier-highlight">
+      <td><strong>Enterprise</strong></td>
+      <td>Compliance AI · Hedge funds · Regulated workflows</td>
+      <td><strong>$999+/mo</strong></td>
+      <td>Unlimited · SLA 99.9%</td>
+      <td>MiFIR Art.22c audit chain · on-prem option</td>
+    </tr>
+    <tr>
+      <td><strong>Platform License</strong></td>
+      <td>Anthropic / OpenAI / Google</td>
+      <td><strong>Negotiated ($2M+/yr)</strong></td>
+      <td>Unlimited · native integration</td>
+      <td>Claude Code / Agents native capability</td>
+    </tr>
+  </table>
+  <p class="section-note">Every tier anchors workflow steps to an external server — physically separate from Claude's context window. After compression, agents call pot_query(eventId) for O(1) exact step recall. Overage (Team): $0.01 per 1,000 calls beyond 10M/month. Enterprise includes MiFIR Art.22c-compliant tamper-evident TTTPS chain.</p>
+
+  <div style="margin-top:16px; padding:12px 16px; border:1px solid #e0e0e0; border-radius:3px; background:#f9f9f9;">
+    <p style="font-size:0.82rem; margin-bottom:8px;"><strong>Get started:</strong></p>
+    <p style="font-size:0.8rem; color:#555;">Dev / Pro / Team: <a href="mailto:peter@kenosian.com?subject=API Key Request" style="font-weight:600;">peter@kenosian.com</a> with tier selection
+    <!-- STRIPE_LINK_PLACEHOLDER: replace with actual Stripe payment links when available --></p>
+    <p style="font-size:0.78rem; color:#888; margin-top:6px;">Enterprise &amp; Platform License: contact for custom onboarding</p>
+  </div>
+</div>
+
+<!-- BSL 라이선스 안내 -->
+<div class="callout-box">
+  <p style="font-weight:700; font-size:0.85rem; margin-bottom:6px;">BSL-1.1 License</p>
+  <p>Commercial use requires a paid license. Free for non-commercial, research, and personal bots with annual revenue &lt; $10,000/yr.</p>
+  <p>Paid tiers include a commercial use license covering the API call volume stated above. Source code is available on GitHub under BSL-1.1 — production use by commercial entities requires the BOT tier or above.</p>
+  <p style="margin-top:8px; font-size:0.78rem; color:#555;">→ <a href="https://github.com/helm-protocol/openttt" style="font-weight:600;">github.com/helm-protocol/openttt</a> &nbsp;·&nbsp; License text included in repository.</p>
+</div>
+
+<!-- TTTPS 규제 티어 요약 -->
+<div style="border:1px solid #e0e0e0; padding:20px 24px; margin-bottom:24px; border-radius:3px;">
+  <h2 style="margin-bottom:12px;">TTTPS — Regulatory Audit Pricing</h2>
+  <table>
+    <tr>
+      <th>Tier</th>
+      <th>Price</th>
+      <th>Coverage</th>
+    </tr>
+    <tr>
+      <td>Compliance</td>
+      <td>€300/mo</td>
+      <td>EU AI Act Art.12, DORA Art.17 audit chain</td>
+    </tr>
+    <tr>
+      <td>MiFID Pro</td>
+      <td>€3,600/mo</td>
+      <td>MiFID II RTS25 + MiFIR Art.22c + GEO roadmap</td>
+    </tr>
+    <tr>
+      <td>Institutional</td>
+      <td>€12,000/mo</td>
+      <td>Full regulatory stack + dedicated chain + SLA 99.99%</td>
+    </tr>
+  </table>
+  <p class="section-note">All tiers include chain_integrity: true verification. MiFID II ±1ms timestamp requires GEO (KTSat ±10ns) add-on — available on roadmap. Contact peter@kenosian.com for MiFID Pro and Institutional onboarding.</p>
+</div>
+
+<div class="churn-box">
+  <p><strong>API access:</strong> All paid tiers require API key. Request at peter@kenosian.com with tier selection and intended use case.</p>
+  <p><strong>Payment:</strong> Monthly invoicing via Stripe. Annual plans available at 10% discount (FUND and above).</p>
+  <p><strong>Upgrades:</strong> Tier upgrades take effect immediately. Downgrades at next billing cycle.</p>
+  <p><strong>SLA:</strong> Dev/Pro/Team — 99.9% uptime. Enterprise — 99.9% uptime + 4h response SLA. Platform License — custom SLA via agreement.</p>
+</div>
+
+<footer>
+  <span>IETF Draft · <a href="https://github.com/helm-protocol/openttt">github.com/helm-protocol/openttt</a></span>
+  <span>peter@kenosian.com · Helm Protocol · 2026 &nbsp;·&nbsp; <a href="/privacy.html">Privacy Policy</a> &nbsp;·&nbsp; <a href="/business.html">→ Business overview</a></span>
+</footer>
+
+</body>
+</html>
