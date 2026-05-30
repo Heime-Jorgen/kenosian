@@ -1119,20 +1119,23 @@ nav.breadcrumb { font-size: 0.8rem; color: #888; margin-bottom: 40px; }
 <h2>Live Demo</h2>
 <p style="font-size:0.82rem; color:#444; margin-bottom:16px;">Available on request via kenosian.com · Demonstrating IETF -03 wire format, replay defense, and audit chain integrity:</p>
 <pre style="font-size:0.75rem;"># Step 1: Generate PoT (143-byte IETF -03 wire format)
-curl -X POST https://api.kenosian.com/api/demo/pot/generate \
+curl -X POST https://api.kenosian.com/pot/generate \
   -H "Content-Type: application/json" \
-  -d '{"ctx_id":"equinix-partner-demo"}'
+  -d '{"eventId":"equinix-partner-demo"}'
+# → {"pot_hash":"a3f1...","signature":"ed25...","timestamp_ns":1748...,"mode":"turbo","event_id":"equinix-partner-demo","current_mode":"turbo"}
 
 # Step 2: Replay defense → HTTP 409
-curl -X POST https://api.kenosian.com/api/demo/pot/verify \
-  -d '{"ctx_id":"equinix-partner-demo","token":"&lt;above&gt;"}'
+curl -X POST https://api.kenosian.com/pot/query \
+  -H "Content-Type: application/json" \
+  -d '{"eventId":"equinix-partner-demo"}'
+# → {"pot_hash":"a3f1...","event_id":"equinix-partner-demo","timestamp_ns":1748...}
 
 # Step 3: Audit chain integrity
 curl https://api.kenosian.com/audit/report \
   -H "Authorization: Bearer $TOKEN" | python3 -c \
   "import sys,json; d=json.load(sys.stdin); \
    print('chain_integrity:', d['chain_integrity'])  # → true
-   print('total_events:', d['total_events'])         # → 796+"</pre>
+   print('total_events_lifetime:', d['total_events_lifetime'])  # → 796+"</pre>
 
 <!-- FINAL CALLOUT -->
 <div class="final-callout">
